@@ -1,98 +1,75 @@
-# vinext-starter
+# Computing from First Principles
 
-A clean full-stack starter running on
-[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support.
+An interactive course for learning how computers and programs work from the bottom up.
 
-## Prerequisites
+The course begins beneath Python—with signals, bits, logic gates, hardware, operating systems, and networks—then builds toward program execution, debugging, values, objects, functions, and data structures. The goal is not merely to memorize syntax. It is to develop a durable mental model of what the computer is doing and why.
 
-- Node.js `>=22.13.0`
+## Who this course is for
 
-## Quick Start
+This course is designed for people with little or no programming experience who want a careful, concrete introduction to computing. It assumes curiosity, not prior technical knowledge.
 
-```bash
-npm install
-npm run dev
-npm run build
-```
+## How the course works
 
-This starter does not use `wrangler.jsonc`.
+Each lesson is divided into focused, screen-sized sections. Interactive diagrams and small experiments make otherwise invisible ideas observable.
 
-## Included Shape
+Learners are encouraged to:
 
-- edit site code under `app/`
-- `.openai/hosting.json` declares optional Sites D1 and R2 bindings
-- `vite.config.ts` simulates declared bindings for local development
-- `db/schema.ts` starts intentionally empty
-- `examples/d1/` contains an optional D1 example surface
-- `drizzle.config.ts` supports local migration generation when needed
+- answer opening questions before seeing the explanations;
+- predict what will happen before changing an input or running a program;
+- interact with bits, gates, circuits, and program state;
+- explain concepts in their own words; and
+- revisit their starting answers at the end of each lesson.
 
-## Workspace Auth Headers
+Progress and written reflections are saved locally in the browser.
 
-OpenAI workspace sites can read the current user's email from
-`oai-authenticated-user-email`.
+## Syllabus
 
-SIWC-authenticated workspace sites may also receive
-`oai-authenticated-user-full-name` when the user's SIWC profile has a non-empty
-`name` claim. The full-name value is percent-encoded UTF-8 and is accompanied by
-`oai-authenticated-user-full-name-encoding: percent-encoded-utf-8`.
+### Lesson 1 — How can 0 and 1 make all of this?
 
-Treat the full name as optional and fall back to email when it is absent:
+Starts with physical signals and follows the layers of abstraction up to applications. It introduces computer internals, operating systems, internet traffic, bits and bytes, logic gates, half and full adders, RGB pixels, and the rules that give bit patterns meaning.
 
-```tsx
-import { headers } from "next/headers";
+**Status:** Available · **Estimated time:** 130–165 minutes
 
-export default async function Home() {
-  const requestHeaders = await headers();
-  const email = requestHeaders.get("oai-authenticated-user-email");
-  const encodedFullName = requestHeaders.get("oai-authenticated-user-full-name");
-  const fullName =
-    encodedFullName &&
-    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
-      "percent-encoded-utf-8"
-      ? decodeURIComponent(encodedFullName)
-      : null;
+### Lesson 2 — Execution, state, and debugging
 
-  const displayName = fullName ?? email;
-  // ...
-}
-```
+Explores precise instructions, execution order, changing program state, breakpoints, stepping, variables, the call stack, and evidence-based debugging.
 
-## Optional Dispatch-Owned ChatGPT Sign-In
+**Status:** Available · **Estimated time:** 45–60 minutes
 
-Import the ready-to-use helpers from `app/chatgpt-auth.ts` when the site needs
-optional or required ChatGPT sign-in:
+### Lesson 3 — Values, variables, and state
 
-- Use `getChatGPTUser()` for optional signed-in UI.
-- Use `requireChatGPTUser(returnTo)` for server-rendered pages that should send
-  anonymous visitors through Sign in with ChatGPT.
-- Use `chatGPTSignInPath(returnTo)` and `chatGPTSignOutPath(returnTo)` for
-  browser links or actions.
-- Pass a same-origin relative `returnTo` path for the destination after sign-in
-  or sign-out. The helper validates and safely encodes it.
-- Mark protected pages with `export const dynamic = "force-dynamic"` because
-  they depend on per-request identity headers.
+How a running program remembers information and how values change over time.
 
-Dispatch owns `/signin-with-chatgpt`, `/signout-with-chatgpt`, `/callback`, the
-OAuth cookies, and identity header injection. Do not implement app routes for
-those reserved paths. Routes that do not import and call the helper remain
-anonymous-compatible.
+**Status:** Planned
 
-SIWC establishes identity only; it does not prove workspace membership. Use the
-Sites hosting platform's access policy controls for workspace-wide restrictions,
-or enforce explicit server-side membership or allowlist checks.
+### Lesson 4 — Objects, references, and memory
 
-Use SIWC for account pages, user-specific dashboards, saved records, and write
-actions tied to the current ChatGPT user. Leave public content anonymous.
+Names, identity, mutation, copying, and an accurate model of Python objects.
 
-## Useful Commands
+**Status:** Planned
 
-- `npm run dev`: start local development
-- `npm run build`: verify the vinext build output
-- `npm test`: build the starter and verify its rendered loading skeleton
-- `npm run db:generate`: generate Drizzle migrations after schema changes
+### Lesson 5 — Functions, scope, and the call stack
 
-## Learn More
+Decomposition, parameters, return values, stack frames, and local state.
 
-- [vinext Documentation](https://github.com/cloudflare/vinext)
-- [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)
+**Status:** Planned
+
+### Lesson 6 — Collections and data structures
+
+Why lists, dictionaries, sets, and tuples exist—and how to choose between them.
+
+**Status:** Planned
+
+## Learning philosophy
+
+Programming becomes easier when the machine is not treated as magic. The course repeatedly connects each abstraction to the layer beneath it, while also showing why abstractions are useful: they let us reason about one level at a time.
+
+The central habit is simple:
+
+> Predict, observe, compare, and explain.
+
+That habit applies equally to a logic gate, a Python expression, and a difficult bug.
+
+## Course status
+
+This course is being developed iteratively. Lessons 1 and 2 are currently available; later lessons will be added as the curriculum develops.
