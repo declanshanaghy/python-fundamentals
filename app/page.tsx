@@ -315,7 +315,7 @@ function CourseIntro({ onBegin }: { onBegin: () => void }) {
 const syllabusLessons = [
   { number: "01", title: "How can 0 and 1 make all of this?", description: "Physical states, abstraction layers, computer internals, operating systems, internet traffic, logic circuits, binary adders, RGB pixels, and representation.", status: "Available", duration: "130–165 min" },
   { number: "02", title: "A real website, reviewed line by line", description: "Walk through a static site built from scratch: HTML structure, CSS styling, JavaScript event handlers, the DOM, browser DevTools, and how a plain repository becomes a live, DNS-addressable website.", status: "Available", duration: "70–90 min" },
-  { number: "03", title: "Execution, state, and debugging", description: "Precise instructions, execution flow, changing program state, debugger controls, and evidence-based investigation.", status: "Available", duration: "45–60 min" },
+  { number: "03", title: "Execution, state, and debugging", description: "Precise instructions, execution flow, changing program state, debugger controls, and evidence-based investigation.", status: "Coming later", duration: "Planned" },
   { number: "04", title: "Values, variables, and state", description: "How a running program remembers information and how values change over time.", status: "Coming later", duration: "Planned" },
   { number: "05", title: "Objects, references, and memory", description: "Names, identity, mutation, copying, and an accurate model of Python objects.", status: "Coming later", duration: "Planned" },
   { number: "06", title: "Functions, scope, and the call stack", description: "Decomposition, parameters, return values, stack frames, and local state.", status: "Coming later", duration: "Planned" },
@@ -344,14 +344,14 @@ function Syllabus({ onOpenLesson, completedLessons }: { onOpenLesson: (lesson: 1
             const lessonNumber = index + 1;
             const isCompleted = completedLessons.includes(lessonNumber);
             return (
-              <article className={`lesson-card ${index < 3 ? "available" : "planned"} ${isCompleted ? "completed" : ""}`} key={lesson.number}>
-                {index < 3 && <a className="lesson-card-link" href={`#lesson-${lesson.number}`} aria-label={`Open Lesson ${lesson.number}: ${lesson.title}`} onClick={(event) => { event.preventDefault(); onOpenLesson(lessonNumber as 1 | 2 | 3); }} />}
+              <article className={`lesson-card ${index < 2 ? "available" : "planned"} ${isCompleted ? "completed" : ""}`} key={lesson.number}>
+                {index < 2 && <a className="lesson-card-link" href={`#lesson-${lesson.number}`} aria-label={`Open Lesson ${lesson.number}: ${lesson.title}`} onClick={(event) => { event.preventDefault(); onOpenLesson(lessonNumber as 1 | 2 | 3); }} />}
                 <div className="lesson-card-top"><span>Lesson {lesson.number}</span><small>{isCompleted ? "Completed ✓" : lesson.status}</small></div>
                 <div className="lesson-card-body">
                   <h2>{lesson.title}</h2>
                   <p>{lesson.description}</p>
                 </div>
-                <div className="lesson-card-footer"><span>{lesson.duration}</span>{index < 3 ? <span className="lesson-card-action" aria-hidden="true">{isCompleted ? "Review lesson →" : "Open lesson →"}</span> : <span>Outline placeholder</span>}</div>
+                <div className="lesson-card-footer"><span>{lesson.duration}</span>{index < 2 ? <span className="lesson-card-action" aria-hidden="true">{isCompleted ? "Review lesson →" : "Open lesson →"}</span> : <span>Outline placeholder</span>}</div>
               </article>
             );
           })}

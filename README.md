@@ -40,7 +40,7 @@ Walks through a real static site built from scratch: why HTML and CSS aren't pro
 
 Explores precise instructions, execution order, changing program state, breakpoints, stepping, variables, the call stack, and evidence-based debugging.
 
-**Status:** Available · **Estimated time:** 45–60 minutes
+**Status:** Planned
 
 ### Lesson 4 — Values, variables, and state
 
@@ -78,4 +78,4 @@ That habit applies equally to a logic gate, a Python expression, and a difficult
 
 ## Course status
 
-This course is being developed iteratively. Lessons 1, 2, and 3 are currently available; later lessons will be added as the curriculum develops.
+This course is being developed iteratively. Lessons 1 and 2 are currently available; later lessons will be added as the curriculum develops.
