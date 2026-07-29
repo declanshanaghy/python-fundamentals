@@ -30,31 +30,37 @@ Starts with physical signals and follows the layers of abstraction up to applica
 
 **Status:** Available · **Estimated time:** 130–165 minutes
 
-### Lesson 2 — Execution, state, and debugging
+### Lesson 2 — A real website, reviewed line by line
+
+Walks through a real static site built from scratch: why HTML and CSS aren't programming languages, an HTML/CSS/JS walkthrough with a live embedded site, `onclick` and other DOM event handlers, the DOM, browser DevTools, how a git repository becomes a live website via GitHub Pages, running the same site yourself with a local Python server, what changes moving from a laptop to the public internet, and how DNS connects a domain name to it.
+
+**Status:** Available · **Estimated time:** 70–90 minutes
+
+### Lesson 3 — Execution, state, and debugging
 
 Explores precise instructions, execution order, changing program state, breakpoints, stepping, variables, the call stack, and evidence-based debugging.
 
 **Status:** Available · **Estimated time:** 45–60 minutes
 
-### Lesson 3 — Values, variables, and state
+### Lesson 4 — Values, variables, and state
 
 How a running program remembers information and how values change over time.
 
 **Status:** Planned
 
-### Lesson 4 — Objects, references, and memory
+### Lesson 5 — Objects, references, and memory
 
 Names, identity, mutation, copying, and an accurate model of Python objects.
 
 **Status:** Planned
 
-### Lesson 5 — Functions, scope, and the call stack
+### Lesson 6 — Functions, scope, and the call stack
 
 Decomposition, parameters, return values, stack frames, and local state.
 
 **Status:** Planned
 
-### Lesson 6 — Collections and data structures
+### Lesson 7 — Collections and data structures
 
 Why lists, dictionaries, sets, and tuples exist—and how to choose between them.
 
@@ -72,4 +78,4 @@ That habit applies equally to a logic gate, a Python expression, and a difficult
 
 ## Course status
 
-This course is being developed iteratively. Lessons 1 and 2 are currently available; later lessons will be added as the curriculum develops.
+This course is being developed iteratively. Lessons 1, 2, and 3 are currently available; later lessons will be added as the curriculum develops.

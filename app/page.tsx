@@ -228,7 +228,7 @@ function CourseIntro({ onBegin }: { onBegin: () => void }) {
           <span><strong>Computing</strong><small>from first principles</small></span>
         </div>
         <span className="intro-location">Course map · Lesson 01</span>
-        <button className="intro-skip" onClick={onBegin}>Go to lesson →</button>
+        <button className="intro-skip" onClick={onBegin}>Go To Lesson →</button>
       </header>
 
       <section className="intro-hero">
@@ -314,14 +314,15 @@ function CourseIntro({ onBegin }: { onBegin: () => void }) {
 
 const syllabusLessons = [
   { number: "01", title: "How can 0 and 1 make all of this?", description: "Physical states, abstraction layers, computer internals, operating systems, internet traffic, logic circuits, binary adders, RGB pixels, and representation.", status: "Available", duration: "130–165 min" },
-  { number: "02", title: "Execution, state, and debugging", description: "Precise instructions, execution flow, changing program state, debugger controls, and evidence-based investigation.", status: "Available", duration: "45–60 min" },
-  { number: "03", title: "Values, variables, and state", description: "How a running program remembers information and how values change over time.", status: "Coming later", duration: "Planned" },
-  { number: "04", title: "Objects, references, and memory", description: "Names, identity, mutation, copying, and an accurate model of Python objects.", status: "Coming later", duration: "Planned" },
-  { number: "05", title: "Functions, scope, and the call stack", description: "Decomposition, parameters, return values, stack frames, and local state.", status: "Coming later", duration: "Planned" },
-  { number: "06", title: "Collections and data structures", description: "Why lists, dictionaries, sets, and tuples exist—and how to choose between them.", status: "Coming later", duration: "Planned" },
+  { number: "02", title: "A real website, reviewed line by line", description: "Walk through a static site built from scratch: HTML structure, CSS styling, JavaScript event handlers, the DOM, browser DevTools, and how a plain repository becomes a live, DNS-addressable website.", status: "Available", duration: "70–90 min" },
+  { number: "03", title: "Execution, state, and debugging", description: "Precise instructions, execution flow, changing program state, debugger controls, and evidence-based investigation.", status: "Available", duration: "45–60 min" },
+  { number: "04", title: "Values, variables, and state", description: "How a running program remembers information and how values change over time.", status: "Coming later", duration: "Planned" },
+  { number: "05", title: "Objects, references, and memory", description: "Names, identity, mutation, copying, and an accurate model of Python objects.", status: "Coming later", duration: "Planned" },
+  { number: "06", title: "Functions, scope, and the call stack", description: "Decomposition, parameters, return values, stack frames, and local state.", status: "Coming later", duration: "Planned" },
+  { number: "07", title: "Collections and data structures", description: "Why lists, dictionaries, sets, and tuples exist—and how to choose between them.", status: "Coming later", duration: "Planned" },
 ] as const;
 
-function Syllabus({ onOpenLesson, completedLessons }: { onOpenLesson: (lesson: 1 | 2) => void; completedLessons: number[] }) {
+function Syllabus({ onOpenLesson, completedLessons }: { onOpenLesson: (lesson: 1 | 2 | 3) => void; completedLessons: number[] }) {
   return (
     <main className="syllabus-page">
       <header className="syllabus-topbar">
@@ -343,16 +344,230 @@ function Syllabus({ onOpenLesson, completedLessons }: { onOpenLesson: (lesson: 1
             const lessonNumber = index + 1;
             const isCompleted = completedLessons.includes(lessonNumber);
             return (
-              <article className={`lesson-card ${index < 2 ? "available" : "planned"} ${isCompleted ? "completed" : ""}`} key={lesson.number}>
-                {index < 2 && <a className="lesson-card-link" href={`#lesson-${lesson.number}`} aria-label={`Open Lesson ${lesson.number}: ${lesson.title}`} onClick={(event) => { event.preventDefault(); onOpenLesson(lessonNumber as 1 | 2); }} />}
+              <article className={`lesson-card ${index < 3 ? "available" : "planned"} ${isCompleted ? "completed" : ""}`} key={lesson.number}>
+                {index < 3 && <a className="lesson-card-link" href={`#lesson-${lesson.number}`} aria-label={`Open Lesson ${lesson.number}: ${lesson.title}`} onClick={(event) => { event.preventDefault(); onOpenLesson(lessonNumber as 1 | 2 | 3); }} />}
                 <div className="lesson-card-top"><span>Lesson {lesson.number}</span><small>{isCompleted ? "Completed ✓" : lesson.status}</small></div>
-                <h2>{lesson.title}</h2>
-                <p>{lesson.description}</p>
-                <div className="lesson-card-footer"><span>{lesson.duration}</span>{index < 2 ? <span className="lesson-card-action" aria-hidden="true">{isCompleted ? "Review lesson →" : "Open lesson →"}</span> : <span>Outline placeholder</span>}</div>
+                <div className="lesson-card-body">
+                  <h2>{lesson.title}</h2>
+                  <p>{lesson.description}</p>
+                </div>
+                <div className="lesson-card-footer"><span>{lesson.duration}</span>{index < 3 ? <span className="lesson-card-action" aria-hidden="true">{isCompleted ? "Review lesson →" : "Open lesson →"}</span> : <span>Outline placeholder</span>}</div>
               </article>
             );
           })}
         </div>
+      </section>
+    </main>
+  );
+}
+
+const catsQuestions = [
+  "What does index.html do?",
+  "What does script.js do?",
+  "How is this site hosted, and what makes it show up at that web address?",
+];
+
+const domTreeRows = [
+  { prefix: "", tag: "<html>", note: "" },
+  { prefix: "├─ ", tag: "<head>", note: "" },
+  { prefix: "│  └─ ", tag: '<link rel="stylesheet">', note: "" },
+  { prefix: "└─ ", tag: "<body>", note: "" },
+  { prefix: "   ├─ ", tag: '<div class="darcy">', note: "" },
+  { prefix: "   │  ├─ ", tag: "<h1>", note: "Hello Darcy" },
+  { prefix: "   │  ├─ ", tag: "<p>", note: "This is my lovely cat!" },
+  { prefix: "   │  ├─ ", tag: '<img class="darcy-photo">', note: "" },
+  { prefix: "   │  └─ ", tag: '<div class="sidebar">', note: "" },
+  { prefix: "   │     ├─ ", tag: '<button onclick="darcyGender()">', note: "Gender" },
+  { prefix: "   │     ├─ ", tag: '<button onclick="darcyAge()">', note: "Age" },
+  { prefix: "   │     ├─ ", tag: '<button onclick="darcyLikes()">', note: "Things he likes" },
+  { prefix: "   │     └─ ", tag: '<p id="darcy-answer">', note: "JS writes the answer text here", target: true },
+  { prefix: "   ├─ ", tag: '<div class="sheldon">', note: "…mirrors Darcy's card, ending in #sheldon-answer" },
+  { prefix: "   └─ ", tag: '<script src="script.js">', note: "" },
+] as const;
+
+const cssBlocks = [
+  { groups: ["opacity"], lines: ['.darcy-photo {', '  width: 100%;', '  max-width: 550px;', '  height: auto;', '  opacity: 0;', '  animation: appear 1s ease forwards;', '}'] },
+  { groups: ["opacity", "duplicate"], lines: ['@keyframes appear {', '  from { opacity: 0; }', '  to   { opacity: 1; }', '}'] },
+  { groups: ["flex"], lines: ['.darcy {', '  display: flex;', '  gap: 20px;', '  border: 2px solid black;', '  padding: 20px;', '  margin: 20px;', '  border-radius: 15px;', '}'] },
+  { groups: ["opacity"], lines: ['.sheldon-photo {', '  width: 100%;', '  max-width: 550px;', '  height: auto;', '  opacity: 0;', '  animation: appear 1s ease forwards;', '}'] },
+  { groups: ["opacity", "duplicate"], lines: ['@keyframes appear {', '  from { opacity: 0; }', '  to   { opacity: 1; }', '}'] },
+  { groups: ["flex"], lines: ['.sheldon {', '  display: flex;', '  gap: 20px;', '  border: 2px solid black;', '  padding: 20px;', '  margin: 20px;', '  border-radius: 15px;', '}'] },
+  { groups: ["media"], lines: ['@media (max-width: 768px) {', '  .darcy, .sheldon {', '    flex-direction: column;', '  }', '}'] },
+] as const;
+
+const catsPageSteps = [
+  { number: "01", label: "Lesson map", eyebrow: "What this review will cover" },
+  { number: "02", label: "Your starting model", eyebrow: "Record what you think before we start" },
+  { number: "03", label: "Not programming languages", eyebrow: "Markup, presentation, and logic are different jobs" },
+  { number: "04", label: "The modern web's exception", eyebrow: "Why this site has no backend" },
+  { number: "05", label: "HTML walkthrough", eyebrow: "Read index.html, live site included" },
+  { number: "06", label: "CSS walkthrough", eyebrow: "Every rule in style.css" },
+  { number: "07", label: "JavaScript walkthrough", eyebrow: "Every function in script.js" },
+  { number: "08", label: "onclick and other events", eyebrow: "Wiring HTML to JavaScript" },
+  { number: "09", label: "The DOM", eyebrow: "The tree the browser actually runs on" },
+  { number: "10", label: "DevTools tour", eyebrow: "Elements, Console, and Sources" },
+  { number: "11", label: "Git & GitHub Pages", eyebrow: "How a repository becomes a website" },
+  { number: "12", label: "server.py on a laptop", eyebrow: "Serving the same files yourself" },
+  { number: "13", label: "Laptop to the internet", eyebrow: "What real deployment adds" },
+  { number: "14", label: "Connecting a DNS name", eyebrow: "Tying back to Lesson 01" },
+  { number: "15", label: "Explain it back", eyebrow: "Compare to what you knew before" },
+] as const;
+
+function CatsPageLesson({ onSyllabus, onComplete }: { onSyllabus: () => void; onComplete: () => void }) {
+  const [current, setCurrent] = useState(0);
+  const [completed, setCompleted] = useState<number[]>([]);
+  const [answers, setAnswers] = useState<string[]>(Array(3).fill(""));
+  const [reflection, setReflection] = useState("");
+  const [showQuirks, setShowQuirks] = useState(false);
+  const [cssHoverGroup, setCssHoverGroup] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem("cfp-lesson-cats-page-v1") || "{}");
+      if (Array.isArray(saved.completed)) setCompleted(saved.completed);
+      if (Number.isInteger(saved.current)) setCurrent(Math.min(saved.current, catsPageSteps.length - 1));
+      if (Array.isArray(saved.answers)) setAnswers(saved.answers);
+      if (typeof saved.reflection === "string") setReflection(saved.reflection);
+    } catch { /* Start fresh if saved data is malformed. */ }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("cfp-lesson-cats-page-v1", JSON.stringify({ completed, current, answers, reflection }));
+  }, [completed, current, answers, reflection]);
+
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement;
+      if (["INPUT", "TEXTAREA"].includes(target.tagName)) return;
+      if (event.key === "ArrowRight") next();
+      if (event.key === "ArrowLeft") setCurrent((value) => Math.max(0, value - 1));
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  });
+
+  function next() {
+    const nextCompleted = completed.includes(current) ? completed : [...completed, current];
+    setCompleted(nextCompleted);
+    if (current === catsPageSteps.length - 1) {
+      localStorage.setItem("cfp-lesson-cats-page-v1", JSON.stringify({ completed: nextCompleted, current, answers, reflection }));
+      onComplete();
+      return;
+    }
+    setCurrent((value) => Math.min(catsPageSteps.length - 1, value + 1));
+  }
+
+  const progress = Math.round((completed.length / catsPageSteps.length) * 100);
+
+  return (
+    <main className="course-shell lesson-two-shell">
+      <header className="topbar">
+        <button className="brand brand-button" onClick={onSyllabus} aria-label="Open the course syllabus"><span className="brand-mark"><i /><i /><i /></span><span><strong>Computing</strong><small>from first principles</small></span></button>
+        <div className="course-progress" aria-label={`${progress}% of lesson complete`}><span>Lesson progress</span><div className="progress-track"><i style={{ width: `${progress}%` }} /></div><strong>{progress}%</strong></div>
+        <button className="lesson-tag syllabus-button" onClick={onSyllabus}>Course syllabus</button>
+      </header>
+      <aside className="sidebar" aria-label="Lesson 2 stages">
+        <div className="sidebar-intro"><span className="signal-dot" /><small>Lesson 02 · 70–90 min</small><h2>How does a real website actually work?</h2></div>
+        <nav>{catsPageSteps.map((step, index) => <button key={step.number} className={`${index === current ? "active" : ""} ${completed.includes(index) ? "done" : ""}`} onClick={() => setCurrent(index)}><span>{completed.includes(index) ? "✓" : step.number}</span><span>{step.label}<small>{step.eyebrow}</small></span></button>)}</nav>
+        <div className="key-hint"><kbd>←</kbd><kbd>→</kbd><span>Move between stages</span></div>
+      </aside>
+      <section className="lesson cats-lesson-section" id="lesson-2">
+        <div className="lesson-heading"><span className="kicker"><i /> {catsPageSteps[current].eyebrow}</span><span className="stage-count">Stage {current + 1} / {catsPageSteps.length}</span></div>
+
+        {current === 0 && <article className="stage lesson2-map"><div><p className="overline">Lesson 02 · A real project, reviewed</p><h1>You already built <em>a real website.</em></h1><ul className="lede lede-bullets"><li>A real static site you built yourself — Darcy and Sheldon’s fan page</li><li>We’ll read every file and click the real, live buttons</li><li>Ends with how a few text files become something the whole internet can visit</li></ul><div className="lesson-promise"><span>Central question</span><p>What actually happens between writing index.html and someone else seeing it in their browser?</p></div></div><div className="lesson-outcome-panel"><span>By the end, you can</span><ol><li><b>01</b>Explain why HTML and CSS are markup, not programming</li><li><b>02</b>Read the HTML, CSS, and JS in your own project line by line</li><li><b>03</b>Explain how onclick and other event handlers connect HTML to JS</li><li><b>04</b>Describe the DOM and use browser DevTools to inspect it</li><li><b>05</b>Trace the path from a git repo to a live, DNS-addressable website</li></ol></div></article>}
+
+        {current === 1 && <article className="stage hero-stage"><p className="overline">Before we open any files</p><h1>Explain the project <em>as it stands today.</em></h1><ul className="lede lede-bullets"><li>Use plain language and your best current understanding</li><li>Answers are saved exactly as written</li><li>You’ll compare them with what you know at the end</li></ul><div className="question-grid vertical-question-grid">{catsQuestions.map((question, index) => <label className="question-card" key={question}><span><b>0{index + 1}</b>{question}</span><textarea value={answers[index]} onChange={(event) => setAnswers((all) => all.map((answer, i) => i === index ? event.target.value : answer))} placeholder="Write your best current explanation…" /></label>)}</div><div className="principle"><span>Working rule</span><p>A specific guess is useful—even when it is wrong—because you can see exactly how your model changes.</p></div></article>}
+
+        {current === 2 && <article className="stage"><p className="overline">Three technologies, three jobs</p><h1>HTML and CSS are not <em>programming.</em></h1><ul className="lede lede-bullets"><li>HTML describes structure — headings, paragraphs, images, buttons</li><li>CSS describes presentation — colour, spacing, layout, animation</li><li>Neither one makes decisions, stores values, or repeats work</li><li>JavaScript is the one real programming language here</li></ul><div className="concept-row"><div><b>HTML</b><p>Markup. Says what each piece of content is.</p></div><div><b>CSS</b><p>Presentation. Says how it should look.</p></div><div><b>JavaScript</b><p>Logic. Says what should happen and when.</p></div></div><div className="principle"><span>How JS gets into a page</span><p>An external file (<code>&lt;script src=&quot;script.js&quot;&gt;&lt;/script&gt;</code>), an inline <code>&lt;script&gt;</code> block written directly in the HTML, or an inline event-handler attribute like <code>onclick=&quot;darcyGender()&quot;</code>—this project actually uses two of the three.</p></div></article>}
+
+        {current === 3 && <article className="stage"><p className="overline">The usual shape of a web app</p><h1>Most sites have a fourth piece: <em>a backend.</em></h1><ul className="lede lede-bullets"><li>HTML, CSS, and JS all run in the visitor’s browser — the &quot;frontend&quot;</li><li>Most real apps also have a &quot;backend&quot; server (Python, Node, Go, Java…)</li><li>This project’s exception: no backend at all in production</li></ul><div className="web-stack-diagram" aria-label="A typical web app: browser talking to a backend server"><div className="web-stack-box"><span className="web-stack-label">Browser</span><div className="web-stack-layer"><b>HTML</b><small>structure</small></div><div className="web-stack-layer"><b>CSS</b><small>presentation</small></div><div className="web-stack-layer"><b>JavaScript</b><small>logic</small></div></div><div className="web-stack-wire"><div className="web-stack-request"><code>fetch(&quot;/api/login&quot;)</code><i>→</i></div><div className="web-stack-request reply"><i>←</i><code>{`{ token: "..." }`}</code></div><div className="web-stack-request"><code>fetch(&quot;/api/comments&quot;)</code><i>→</i></div></div><div className="web-stack-box backend"><span className="web-stack-label">Backend server</span><div className="web-stack-layer"><b>Python / Node / Go / Java…</b><small>checks passwords, queries a database, decides what to send back</small></div></div></div><div className="lesson-promise"><span>This project’s exception</span><p>This cat page has <b>no backend at all</b> in production. There’s a <code>server.py</code> file in the repository—but it’s a local development convenience, never used by the live, deployed site. We’ll come back to exactly what it does, and what would change if it were used for real, later in this lesson.</p></div></article>}
+
+        {current === 4 && <article className="stage"><p className="overline">The actual file, no cleanup applied</p><h1>Read index.html <em>top to bottom.</em></h1><ul className="lede lede-bullets"><li>This is the real file — no cleanup applied</li><li>Spot what’s structurally off before revealing the notes</li><li>Then try the live buttons below</li></ul><div className="bug-lab lab-panel"><div className="panel-title"><span>index.html</span><small>● live</small></div><pre>{`<!DOCTYPE html>
+<html>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Cats</title>
+
+    <link rel="stylesheet" href="style.css">
+    <head>
+        <link rel="stylesheet" href="style.css">
+   </head>
+   <body>
+    <div class="darcy">
+    <h1>Hello Darcy</h1>
+    <p>This is my lovely cat!</p>
+    <img src="darcy.jpg" alt="Darcy" class='darcy-photo'>
+    </div>
+    <div class="sidebar">
+    <button onclick="darcyGender()">Gender</button>
+    <button onclick="darcyAge()">Age</button>
+    <button onclick="darcyLikes()">Things he likes</button>
+    <p id="darcy-answer"></p>
+    </div>
+</div>
+   <div class="sheldon">
+    <h1>Hello Sheldon</h1>
+    <p>This is Sheldon, the sweetest kitty</p>
+    <img src="sheldon.jpg" alt="Sheldon" class="sheldon-photo">
+    </div>
+    <div class="sidebar">
+    <button onclick="sheldonGender()">Gender</button>
+    <button onclick="sheldonAge()">Age</button>
+    <button onclick="sheldonLikes()">Things he likes</button>
+    <p id="sheldon-answer"></p>
+</div>
+</div>
+    <script src="script.js"></script>
+   </body>
+</html>`}</pre></div><button className="run-button" onClick={() => setShowQuirks(!showQuirks)}>{showQuirks ? "Hide The Notes" : "Reveal What's Structurally Off"}</button>{showQuirks && <div className="bug-answer"><b>Three real quirks</b><p><code>&lt;link rel=&quot;stylesheet&quot;&gt;</code> appears twice—once before <code>&lt;head&gt;</code> even opens. <code>&lt;head&gt;</code> itself is opened partway down the file, after a <code>&lt;title&gt;</code> and two <code>&lt;meta&gt;</code> tags that should live inside it. And there’s one extra closing <code>&lt;/div&gt;</code> after Darcy’s sidebar that doesn’t match anything. None of this crashes the page—browsers are extremely forgiving and silently repair broken HTML using a recovery algorithm—but a browser’s repair isn’t always the structure you intended.</p></div>}<div className="cats-embed"><iframe src="https://dankokek.github.io/cats_page/" title="Live: Darcy and Sheldon's cat page" loading="lazy" /></div></article>}
+
+        {current === 5 && <article className="stage"><p className="overline">Presentation rules</p><h1>Every rule in <em>style.css.</em></h1><div className="concept-row">
+          <div className={cssHoverGroup === "opacity" ? "active" : ""} onMouseEnter={() => setCssHoverGroup("opacity")} onMouseLeave={() => setCssHoverGroup(null)}><b>opacity + animation</b><p>Photos start invisible (<code>opacity: 0</code>) and the <code>appear</code> keyframe animation fades them in over 1 second.</p></div>
+          <div className={cssHoverGroup === "flex" ? "active" : ""} onMouseEnter={() => setCssHoverGroup("flex")} onMouseLeave={() => setCssHoverGroup(null)}><b>display: flex</b><p>Puts the photo and the sidebar buttons side by side inside each card.</p></div>
+          <div className={cssHoverGroup === "duplicate" ? "active" : ""} onMouseEnter={() => setCssHoverGroup("duplicate")} onMouseLeave={() => setCssHoverGroup(null)}><b>Duplicated rules</b><p>Both <code>@keyframes appear</code> blocks are copy-pasted rather than shared—works fine, but it’s the same rule written twice.</p></div>
+          <div className={cssHoverGroup === "media" ? "active" : ""} onMouseEnter={() => setCssHoverGroup("media")} onMouseLeave={() => setCssHoverGroup(null)}><b>@media (max-width: 768px)</b><p>Below 768px wide, both cards switch from a row to a stacked column—this is what makes the page usable on a phone.</p></div>
+        </div><div className="bug-lab lab-panel"><div className="panel-title"><span>style.css</span><small>reformatted for readability · hover a card above</small></div><pre className="css-annotated">{cssBlocks.map((block, index) => <div key={index} className={`css-block ${cssHoverGroup && (block.groups as readonly string[]).includes(cssHoverGroup) ? "highlight" : ""}`}>{block.lines.join("\n")}</div>)}</pre></div></article>}
+
+        {current === 6 && <article className="stage"><p className="overline">Real logic, six small functions</p><h1>Every function in <em>script.js.</em></h1><ul className="lede lede-bullets"><li>Six functions, one job each</li><li>Find an element by its id</li><li>Replace its text</li></ul><div className="bug-lab lab-panel"><div className="panel-title"><span>script.js</span><small>6 lines</small></div><pre>{`function darcyGender() {document.getElementById("darcy-answer").innerText="Male";}
+function darcyAge() {document.getElementById("darcy-answer").innerText="2 years old";}
+function darcyLikes() {document.getElementById("darcy-answer").innerText="Boxes,sleeping and treats";}
+function sheldonGender() {document.getElementById("sheldon-answer").innerText = "Male";}
+function sheldonAge() {document.getElementById("sheldon-answer").innerText = "1 year old";}
+function sheldonLikes() {document.getElementById("sheldon-answer").innerText = "Playing, cuddles and food";}`}</pre></div><div className="principle"><span>The pattern, every time</span><p><code>document.getElementById(&quot;darcy-answer&quot;)</code> finds the exact element from the HTML with that id, and <code>.innerText = &quot;...&quot;</code> replaces whatever text is inside it. Six functions, same two steps, six different ids and strings.</p></div></article>}
+
+        {current === 7 && <article className="stage"><p className="overline">One attribute, wiring HTML to JS</p><h1><code>onclick</code>, then <em>every other event.</em></h1><ul className="lede lede-bullets"><li><code>onclick=&quot;darcyGender()&quot;</code> wires an HTML attribute to a JS function</li><li>A click runs the named function — <code>darcyGender()</code> in script.js</li><li>That function sets <code>#darcy-answer</code>’s text to &quot;Male&quot; — nothing more</li></ul><p className="concept-row-label">Other events HTML elements can handle</p><div className="concept-row"><div><b>mouseover / mouseout</b><p>Pointer enters or leaves an element—used for hover effects and tooltips.</p></div><div><b>change</b><p>An input, select, or checkbox’s value was committed (usually on blur, not every keystroke).</p></div><div><b>submit</b><p>A form was submitted—almost always paired with <code>event.preventDefault()</code> to stop a full page reload.</p></div><div><b>keydown / keyup</b><p>A key was pressed or released—used for shortcuts and live validation.</p></div><div><b>load</b><p>An image, script, or the whole page finished loading.</p></div><div><b>DOMContentLoaded</b><p>The HTML has been fully parsed—the standard place to start JS that touches the page.</p></div></div><div className="lesson-promise"><span>The modern alternative</span><p>Inline <code>onclick=&quot;...&quot;</code> works, but mixes structure and behaviour in one attribute and only allows one handler per event. Most real code instead uses <code>element.addEventListener(&quot;click&quot;, darcyGender)</code> from within the JS file—same effect, but HTML stays pure structure and an element can listen for the same event more than once.</p></div></article>}
+
+        {current === 8 && <article className="stage"><p className="overline">The DOM — why getElementById works at all</p><h1>The browser builds a tree called the <em>DOM.</em></h1><ul className="lede lede-bullets"><li>DOM stands for <b>Document Object Model</b></li><li>Not the HTML file — a live tree the browser builds while parsing it</li><li>JS reads and changes the tree, never the file</li><li>The browser repaints the screen to match</li></ul><div className="dom-tree" aria-label="The DOM tree the browser builds from index.html">{domTreeRows.map((row, index) => <div key={index} className={`dom-tree-row ${row.target ? "target" : ""}`}><span className="dom-tree-prefix">{row.prefix}</span><code>{row.tag}</code>{row.note && <small>{row.note}</small>}</div>)}</div><div className="concept-row"><div><b>01 · Find the node</b><p><code>document.getElementById(&quot;darcy-answer&quot;)</code> walks the tree above and returns the one highlighted node with that id.</p></div><div><b>02 · Change a property</b><p><code>.innerText = &quot;Male&quot;</code> sets a property directly on that node object — not on the HTML file, which is never touched again.</p></div><div><b>03 · Instant repaint</b><p>The browser notices the node changed and redraws just that piece of the screen — no reload, no re-fetching index.html.</p></div></div></article>}
+
+        {current === 9 && <article className="stage debugger-controls-stage"><div><p className="overline">Tools every browser ships with</p><h1>Open DevTools and <em>look inside.</em></h1><ul className="lede lede-bullets"><li>Open the live site in another tab</li><li>Right-click any element, choose &quot;Inspect&quot; (or press F12)</li><li>Three panels matter most right now</li></ul><a className="new-tab-link" href="https://dankokek.github.io/cats_page/" target="_blank" rel="noopener noreferrer">Open the live site ↗</a></div><div className="debugger-controls"><div><kbd>⛶</kbd><b>Elements</b><p>Shows the live DOM tree, not the original HTML file—edit it here and watch the page change instantly.</p></div><div><kbd>≡</kbd><b>Console</b><p>Run JavaScript directly, or read errors and <code>console.log</code> output from script.js.</p></div><div><kbd>●</kbd><b>Sources</b><p>Open script.js here and click a line number to set a real breakpoint—exactly the skill Lesson 03 builds on next.</p></div></div></article>}
+
+        {current === 10 && <article className="stage"><p className="overline">How this site is actually live</p><h1>A repository <em>becomes a website.</em></h1><ul className="lede lede-bullets"><li>Code lives in a GitHub repository</li><li>GitHub Pages watches the <code>main</code> branch and republishes on every push</li><li>No build step — it’s already just static files</li></ul><div className="flow-diagram" aria-label="How a git push becomes a live website"><div className="flow-step"><b>Your repo</b><small>index.html, style.css, script.js on the main branch</small></div><div className="flow-arrow">→<span>git push</span></div><div className="flow-step"><b>GitHub Pages</b><small>watches main, republishes automatically</small></div><div className="flow-arrow">→</div><div className="flow-step highlight"><b>Live website</b><small>dankokek.github.io/cats_page</small></div></div><div className="lesson-promise"><span>Worth noticing</span><p>This is the entire deployment story for this project: <code>git push</code>, and GitHub serves the files. There’s no backend, no database, no build process converting anything into anything else.</p></div></article>}
+
+        {current === 11 && <article className="stage"><p className="overline">A different way to serve the same files</p><h1>What if <em>you</em> were the server?</h1><ul className="lede lede-bullets"><li>Not used by the live site</li><li>But it’s a real, working web server</li><li>Just running on your own laptop instead of GitHub’s infrastructure</li></ul><div className="bug-lab lab-panel"><div className="panel-title"><span>server.py</span><small>13 lines</small></div><pre>{`import http.server
+import socketserver
+import os
+
+PORT = 8000
+DIRECTORY = os.path.dirname(os.path.abspath(__file__))
+
+os.chdir(DIRECTORY)
+
+Handler = http.server.SimpleHTTPRequestHandler
+
+with socketserver.TCPServer(("0.0.0.0", PORT), Handler) as httpd:
+    print(f"Сайт запущен на http://0.0.0.0:{PORT}/")
+    print("Откройте его на другом устройстве через IP вашего компьютера")
+    httpd.serve_forever()`}</pre></div><div className="concept-row"><div><b>SimpleHTTPRequestHandler</b><p>Python’s built-in &quot;hand out files from a folder&quot; web server—no framework required.</p></div><div><b>0.0.0.0:8000</b><p>Listens on port 8000, on every network interface the laptop has—not just localhost.</p></div><div><b>http://localhost:8000</b><p>Visiting this on the same laptop reaches the server directly, no network required.</p></div><div><b>Your computer’s IP</b><p>The script’s own print statement says it: another device on the same Wi-Fi can reach it too, via your laptop’s local network address instead of &quot;localhost.&quot;</p></div></div></article>}
+
+        {current === 12 && <article className="stage"><p className="overline">From your Wi‑Fi to the whole internet</p><h1>Three things have to <em>change.</em></h1><ul className="lede lede-bullets"><li>Laptop-only reaches devices on the same local network</li><li>Going public means solving three separate problems</li></ul><div className="flow-diagram" aria-label="From a laptop running server.py to a publicly reachable site"><div className="flow-step"><b>Your laptop</b><small>python server.py on 0.0.0.0:8000</small></div><div className="flow-arrow">→<span>LAN only</span></div><div className="flow-step"><b>Home router</b><small>no public, stable address</small></div><div className="flow-arrow">→<span>rent one</span></div><div className="flow-step highlight"><b>Cloud VPS</b><small>real public IP, stays running</small></div></div><div className="concept-row"><div><b>A public address</b><p>Your laptop’s home IP isn’t stable or reachable from outside your router. You’d rent a small cloud server (a VPS) with a real public IP instead.</p></div><div><b>Staying up</b><p>Closing the terminal kills <code>python server.py</code>. A real deployment runs it as a background service that restarts itself and survives reboots.</p></div><div><b>Being production-grade</b><p><code>SimpleHTTPRequestHandler</code> is single-threaded, has no TLS (no <code>https://</code>), and was never hardened for the open internet. Real deployments put a proper web server like nginx in front of it, or—as this project actually does—skip running a server at all and use static hosting.</p></div></div></article>}
+
+        {current === 13 && <article className="stage"><p className="overline">Back to Lesson 01: DNS</p><h1>How a <em>name</em> finds that server.</h1><ul className="lede lede-bullets"><li>Lesson 01 covered DNS: a domain name → an IP address</li><li>Once a server has a public IP, you’d buy a domain</li><li>A DNS record connects the domain to that IP</li></ul><div className="flow-diagram" aria-label="How a domain name resolves to a server"><div className="flow-step"><b>mycats.com</b><small>the domain you bought</small></div><div className="flow-arrow">→<span>DNS lookup</span></div><div className="flow-step"><b>A / CNAME record</b><small>the domain’s DNS settings</small></div><div className="flow-arrow">→</div><div className="flow-step highlight"><b>Server</b><small>your VPS’s IP, or GitHub Pages</small></div></div><div className="concept-row"><div><b>A record</b><p>Points a domain straight at a fixed IP address—what you’d use for your own VPS running server.py.</p></div><div><b>CNAME record</b><p>Points a domain at another hostname instead of an IP—what GitHub Pages actually uses for a custom domain, since GitHub’s own IPs can change underneath you.</p></div><div><b>Same question, two answers</b><p>Both records answer &quot;where does this name point?&quot;—they just point at different kinds of things, because a VPS you control and a platform like GitHub Pages host your files differently.</p></div></div></article>}
+
+        {current === 14 && <article className="stage final-reflection-stage"><div className="final-reflection-heading"><p className="overline">Return to your starting model</p><h1>What became <em>more precise?</em></h1><ul className="lede lede-bullets"><li>These are the answers you recorded at the start of this lesson</li><li>Read them without editing</li><li>Then explain what you’d add, remove, or say differently now</li></ul></div><div className="answer-review-grid">{catsQuestions.map((question, index) => <article key={question}><span>0{index + 1}</span><div><b>{question}</b><p>{answers[index].trim() || "No starting answer was recorded."}</p></div></article>)}</div><label className="final-reflection"><span>Your revised model</span><b>How do HTML, CSS, JS, the DOM, events, git, GitHub Pages, and DNS all fit together to make this page work?</b><textarea value={reflection} onChange={(event) => setReflection(event.target.value)} placeholder="Explain what you understand now and how your thinking changed…" /></label><div className="finish-card"><span>Lesson 02</span><div><h3>You just read a real project end to end.</h3><p>Every idea here—markup vs. logic, events, the DOM, deployment, DNS—applies to every website you’ll ever look at.</p></div><button onClick={onSyllabus}>Return To Syllabus ↗</button></div></article>}
+
+        <footer className="lesson-nav"><button onClick={() => setCurrent((value) => Math.max(0, value - 1))} disabled={current === 0}>← Previous</button><span>{catsPageSteps.map((_, index) => <i key={index} className={`${index === current ? "active" : ""} ${completed.includes(index) ? "done" : ""}`} />)}</span><button className="next" onClick={next}>{current === catsPageSteps.length - 1 ? "Mark Lesson Complete" : "Next"} →</button></footer>
       </section>
     </main>
   );
@@ -439,26 +654,26 @@ function LessonTwo({ onSyllabus, onComplete }: { onSyllabus: () => void; onCompl
         <button className="lesson-tag syllabus-button" onClick={onSyllabus}>Course syllabus</button>
       </header>
       <aside className="sidebar" aria-label="Lesson 2 stages">
-        <div className="sidebar-intro"><span className="signal-dot" /><small>Lesson 02 · 45–60 min</small><h2>How do programs execute—and how do we investigate them?</h2></div>
+        <div className="sidebar-intro"><span className="signal-dot" /><small>Lesson 03 · 45–60 min</small><h2>How do programs execute—and how do we investigate them?</h2></div>
         <nav>{lessonTwoSteps.map((step, index) => <button key={step.number} className={`${index === current ? "active" : ""} ${completed.includes(index) ? "done" : ""}`} onClick={() => setCurrent(index)}><span>{completed.includes(index) ? "✓" : step.number}</span><span>{step.label}<small>{step.eyebrow}</small></span></button>)}</nav>
         <div className="key-hint"><kbd>←</kbd><kbd>→</kbd><span>Move between stages</span></div>
       </aside>
       <section className="lesson" id="lesson-2">
         <div className="lesson-heading"><span className="kicker"><i /> {lessonTwoSteps[current].eyebrow}</span><span className="stage-count">Stage {current + 1} / {lessonTwoSteps.length}</span></div>
 
-        {current === 0 && <article className="stage lesson2-map"><div><p className="overline">Lesson 02 · Programs in motion</p><h1>Execution turns instructions into <em>changing state.</em></h1><p className="lede">This lesson makes running programs observable. You’ll predict what should happen, pause execution, inspect what the program knows, and use evidence when reality differs.</p><div className="lesson-promise"><span>Central question</span><p>What happens between reading one line of Python and seeing its effect?</p></div></div><div className="lesson-outcome-panel"><span>By the end, you can</span><ol><li><b>01</b>Describe an algorithm as ordered, precise instructions</li><li><b>02</b>Trace execution and identify changing program state</li><li><b>03</b>Set a breakpoint and step over, into, and out</li><li><b>04</b>Inspect variables, watches, and the call stack</li><li><b>05</b>Find the earliest difference between prediction and reality</li></ol></div></article>}
+        {current === 0 && <article className="stage lesson2-map"><div><p className="overline">Lesson 03 · Programs in motion</p><h1>Execution turns instructions into <em>changing state.</em></h1><p className="lede">This lesson makes running programs observable. You’ll predict what should happen, pause execution, inspect what the program knows, and use evidence when reality differs.</p><div className="lesson-promise"><span>Central question</span><p>What happens between reading one line of Python and seeing its effect?</p></div></div><div className="lesson-outcome-panel"><span>By the end, you can</span><ol><li><b>01</b>Describe an algorithm as ordered, precise instructions</li><li><b>02</b>Trace execution and identify changing program state</li><li><b>03</b>Set a breakpoint and step over, into, and out</li><li><b>04</b>Inspect variables, watches, and the call stack</li><li><b>05</b>Find the earliest difference between prediction and reality</li></ol></div></article>}
 
-        {current === 1 && <article className="stage"><p className="overline">An algorithm is a precise procedure</p><h1>Can a very literal machine <em>make tea?</em></h1><p className="lede">A computer cannot fill gaps with common sense. Put the instructions in a workable order, then run them.</p><div className="tea-lab lab-panel"><div className="panel-title"><span>TEA_ALGORITHM.txt</span><small>Order matters</small></div><ol>{teaOrder.map((step, index) => <li key={step}><b>{String(index + 1).padStart(2, "0")}</b><span>{step}</span><div><button onClick={() => moveTea(index, -1)} aria-label={`Move ${step} up`}>↑</button><button onClick={() => moveTea(index, 1)} aria-label={`Move ${step} down`}>↓</button></div></li>)}</ol><button className="run-button" onClick={runTea}><span>▶</span> Run instructions</button>{teaMessage && <p className="lab-message" role="status">{teaMessage}</p>}</div><div className="concept-row"><div><b>Sequence</b><p>Which instruction happens first?</p></div><div><b>Input & output</b><p>What enters and what should emerge?</p></div><div><b>Decisions</b><p>What changes when a condition is true?</p></div><div><b>Repetition</b><p>Which work happens again?</p></div></div></article>}
+        {current === 1 && <article className="stage"><p className="overline">An algorithm is a precise procedure</p><h1>Can a very literal machine <em>make tea?</em></h1><p className="lede">A computer cannot fill gaps with common sense. Put the instructions in a workable order, then run them.</p><div className="tea-lab lab-panel"><div className="panel-title"><span>TEA_ALGORITHM.txt</span><small>Order matters</small></div><ol>{teaOrder.map((step, index) => <li key={step}><b>{String(index + 1).padStart(2, "0")}</b><span>{step}</span><div><button onClick={() => moveTea(index, -1)} aria-label={`Move ${step} up`}>↑</button><button onClick={() => moveTea(index, 1)} aria-label={`Move ${step} down`}>↓</button></div></li>)}</ol><button className="run-button" onClick={runTea}><span>▶</span> Run Instructions</button>{teaMessage && <p className="lab-message" role="status">{teaMessage}</p>}</div><div className="concept-row"><div><b>Sequence</b><p>Which instruction happens first?</p></div><div><b>Input & output</b><p>What enters and what should emerge?</p></div><div><b>Decisions</b><p>What changes when a condition is true?</p></div><div><b>Repetition</b><p>Which work happens again?</p></div></div></article>}
 
-        {current === 2 && <article className="stage"><p className="overline">Execution flow and program state</p><h1>Run one line. Then ask: <em>what changed?</em></h1><p className="lede">The highlighted line is the next instruction. Predict its effect before pressing “Step over.”</p><div className="debugger"><div className="editor lab-panel"><div className="panel-title"><span>lesson_02.py</span><small>● paused</small></div><div className="code-lines">{codeLines.map((line) => <div key={line.n} className={traceLine < 5 && line.n === traceLine + 1 ? "active-line" : ""}><span>{line.n}</span><code>{line.text || " "}</code></div>)}</div><button className="run-button" onClick={() => setTraceLine((line) => line >= 5 ? 0 : line + 1)}>{traceLine >= 5 ? "↺ Reset" : "↧ Step over"}</button></div><div className="inspectors"><div className="inspector"><div className="panel-title"><span>VARIABLES</span><small>Local state</small></div>{Object.keys(variables).length ? Object.entries(variables).map(([key, value]) => <p key={key}><span>{key}</span><b>{value}</b></p>) : <em>No variables yet</em>}</div><div className="inspector"><div className="panel-title"><span>CALL STACK</span></div><p><span>lesson_02.py</span><b>line {Math.min(traceLine + 1, 5)}</b></p></div><div className="inspector console"><div className="panel-title"><span>OUTPUT</span></div><code>{traceLine >= 5 ? "> 13" : "> _"}</code></div></div></div></article>}
+        {current === 2 && <article className="stage"><p className="overline">Execution flow and program state</p><h1>Run one line. Then ask: <em>what changed?</em></h1><p className="lede">The highlighted line is the next instruction. Predict its effect before pressing “Step over.”</p><div className="debugger"><div className="editor lab-panel"><div className="panel-title"><span>lesson_02.py</span><small>● paused</small></div><div className="code-lines">{codeLines.map((line) => <div key={line.n} className={traceLine < 5 && line.n === traceLine + 1 ? "active-line" : ""}><span>{line.n}</span><code>{line.text || " "}</code></div>)}</div><button className="run-button" onClick={() => setTraceLine((line) => line >= 5 ? 0 : line + 1)}>{traceLine >= 5 ? "↺ Reset" : "↧ Step Over"}</button></div><div className="inspectors"><div className="inspector"><div className="panel-title"><span>VARIABLES</span><small>Local state</small></div>{Object.keys(variables).length ? Object.entries(variables).map(([key, value]) => <p key={key}><span>{key}</span><b>{value}</b></p>) : <em>No variables yet</em>}</div><div className="inspector"><div className="panel-title"><span>CALL STACK</span></div><p><span>lesson_02.py</span><b>line {Math.min(traceLine + 1, 5)}</b></p></div><div className="inspector console"><div className="panel-title"><span>OUTPUT</span></div><code>{traceLine >= 5 ? "> 13" : "> _"}</code></div></div></div></article>}
 
         {current === 3 && <article className="stage debugger-controls-stage"><div><p className="overline">A transferable engineering skill</p><h1>The debugger gives you <em>control over time.</em></h1><p className="lede">It pauses a running program and exposes selected parts of its state. It is another abstraction—not a direct view of electrical charge or every byte in memory.</p></div><div className="debugger-controls"><div><kbd>●</kbd><b>Breakpoint</b><p>Pause before a chosen line executes.</p></div><div><kbd>↧</kbd><b>Step over</b><p>Run the current line without entering called functions.</p></div><div><kbd>↓</kbd><b>Step into</b><p>Enter a function call and inspect its execution.</p></div><div><kbd>↑</kbd><b>Step out</b><p>Finish the current function and return to its caller.</p></div><div><kbd>▶</kbd><b>Continue</b><p>Run until the next breakpoint or program end.</p></div><div><kbd>ƒ</kbd><b>Watch</b><p>Re-evaluate a chosen expression whenever execution pauses.</p></div><div><kbd>≡</kbd><b>Call stack</b><p>See which functions called which, and where each paused.</p></div><div><kbd>◇</kbd><b>Conditional breakpoint</b><p>Pause only when a useful condition is true.</p></div></div></article>}
 
-        {current === 4 && <article className="stage bug-stage"><div className="bug-copy"><p className="overline">Evidence-based debugging</p><h1>Find the first place reality <em>diverges.</em></h1><p className="lede">The goal is 17, but this program prints 4. Predict the value of <code>total</code> after each loop iteration before revealing the diagnosis.</p><div className="principle"><span>Method</span><p>Predict → observe → locate the earliest difference → explain the cause → test the correction.</p></div></div><div className="bug-lab lab-panel"><div className="panel-title"><span>broken_total.py</span><small>Expected 17 · Actual 4</small></div><pre><span>prices</span> = [6, 7, 4]{"\n"}<span>total</span> = 0{"\n\n"}<b>for</b> price <b>in</b> prices:{"\n"}    total = price{"\n\n"}print(total)</pre><button className="run-button" onClick={() => setShowBug(!showBug)}>{showBug ? "Hide diagnosis" : "Reveal earliest divergence"}</button>{showBug && <div className="bug-answer"><b>Second iteration</b><p>After the first price, both prediction and reality are 6. After the second, the correct running total is 13—but reality becomes 7 because <code>total = price</code> replaces the total. The correction is <code>total = total + price</code>.</p></div>}</div></article>}
+        {current === 4 && <article className="stage bug-stage"><div className="bug-copy"><p className="overline">Evidence-based debugging</p><h1>Find the first place reality <em>diverges.</em></h1><p className="lede">The goal is 17, but this program prints 4. Predict the value of <code>total</code> after each loop iteration before revealing the diagnosis.</p><div className="principle"><span>Method</span><p>Predict → observe → locate the earliest difference → explain the cause → test the correction.</p></div></div><div className="bug-lab lab-panel"><div className="panel-title"><span>broken_total.py</span><small>Expected 17 · Actual 4</small></div><pre><span>prices</span> = [6, 7, 4]{"\n"}<span>total</span> = 0{"\n\n"}<b>for</b> price <b>in</b> prices:{"\n"}    total = price{"\n\n"}print(total)</pre><button className="run-button" onClick={() => setShowBug(!showBug)}>{showBug ? "Hide Diagnosis" : "Reveal Earliest Divergence"}</button>{showBug && <div className="bug-answer"><b>Second iteration</b><p>After the first price, both prediction and reality are 6. After the second, the correct running total is 13—but reality becomes 7 because <code>total = price</code> replaces the total. The correction is <code>total = total + price</code>.</p></div>}</div></article>}
 
-        {current === 5 && <article className="stage lesson2-reflection"><div><p className="overline">Explain it back</p><h1>What does it mean for a program to <em>execute?</em></h1><p className="lede">Explain how sequence, state, breakpoints, stepping, variables, the call stack, prediction, and observation fit together.</p><textarea value={reflection} onChange={(event) => setReflection(event.target.value)} placeholder="Build your explanation in your own words…" /></div><div className="finish-card"><span>Lesson 02</span><div><h3>Debugging is investigation, not failure.</h3><p>Correct output is evidence. A precise explanation of how the program produced it is understanding.</p></div><button onClick={onSyllabus}>Return to syllabus ↗</button></div></article>}
+        {current === 5 && <article className="stage lesson2-reflection"><div><p className="overline">Explain it back</p><h1>What does it mean for a program to <em>execute?</em></h1><p className="lede">Explain how sequence, state, breakpoints, stepping, variables, the call stack, prediction, and observation fit together.</p><textarea value={reflection} onChange={(event) => setReflection(event.target.value)} placeholder="Build your explanation in your own words…" /></div><div className="finish-card"><span>Lesson 03</span><div><h3>Debugging is investigation, not failure.</h3><p>Correct output is evidence. A precise explanation of how the program produced it is understanding.</p></div><button onClick={onSyllabus}>Return To Syllabus ↗</button></div></article>}
 
-        <footer className="lesson-nav"><button onClick={() => setCurrent((value) => Math.max(0, value - 1))} disabled={current === 0}>← Previous</button><span>{lessonTwoSteps.map((_, index) => <i key={index} className={`${index === current ? "active" : ""} ${completed.includes(index) ? "done" : ""}`} />)}</span><button className="next" onClick={next}>{current === lessonTwoSteps.length - 1 ? "Mark lesson complete" : "Complete & continue"} →</button></footer>
+        <footer className="lesson-nav"><button onClick={() => setCurrent((value) => Math.max(0, value - 1))} disabled={current === 0}>← Previous</button><span>{lessonTwoSteps.map((_, index) => <i key={index} className={`${index === current ? "active" : ""} ${completed.includes(index) ? "done" : ""}`} />)}</span><button className="next" onClick={next}>{current === lessonTwoSteps.length - 1 ? "Mark Lesson Complete" : "Next"} →</button></footer>
       </section>
     </main>
   );
@@ -466,7 +681,7 @@ function LessonTwo({ onSyllabus, onComplete }: { onSyllabus: () => void; onCompl
 
 export default function Home() {
   const [showSyllabus, setShowSyllabus] = useState(true);
-  const [activeLesson, setActiveLesson] = useState<1 | 2>(1);
+  const [activeLesson, setActiveLesson] = useState<1 | 2 | 3>(1);
   const [completedLessons, setCompletedLessons] = useState<number[]>([]);
   const [current, setCurrent] = useState(0);
   const [completed, setCompleted] = useState<number[]>([]);
@@ -491,13 +706,13 @@ export default function Home() {
 
   useEffect(() => {
     try {
-      const saved = JSON.parse(localStorage.getItem("cfp-course-completed-v1") || "[]");
+      const saved = JSON.parse(localStorage.getItem("cfp-course-completed-v2") || "[]");
       if (Array.isArray(saved)) setCompletedLessons(saved.filter((lesson) => Number.isInteger(lesson)));
     } catch { /* No completed lessons yet. */ }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("cfp-course-completed-v1", JSON.stringify(completedLessons));
+    localStorage.setItem("cfp-course-completed-v2", JSON.stringify(completedLessons));
   }, [completedLessons]);
 
   useEffect(() => {
@@ -549,7 +764,7 @@ export default function Home() {
         if (event.key === "Escape") setShowSyllabus(false);
         return;
       }
-      if (activeLesson === 2) return;
+      if (activeLesson === 2 || activeLesson === 3) return;
       if (event.key === "ArrowRight") goNext();
       if (event.key === "ArrowLeft") setCurrent((value) => Math.max(0, value - 1));
     };
@@ -595,7 +810,11 @@ export default function Home() {
   }
 
   if (activeLesson === 2) {
-    return <LessonTwo onSyllabus={() => setShowSyllabus(true)} onComplete={() => { markLessonComplete(2); setShowSyllabus(true); }} />;
+    return <CatsPageLesson onSyllabus={() => setShowSyllabus(true)} onComplete={() => { markLessonComplete(2); setShowSyllabus(true); }} />;
+  }
+
+  if (activeLesson === 3) {
+    return <LessonTwo onSyllabus={() => setShowSyllabus(true)} onComplete={() => { markLessonComplete(3); setShowSyllabus(true); }} />;
   }
 
   return (
@@ -877,7 +1096,7 @@ export default function Home() {
               <label>Number of bits <input type="range" min="1" max="8" value={bitCount} onChange={(e) => { const next = Number(e.target.value); setBitCount(next); setPattern((value) => Math.min(value, 2 ** next - 1)); }} /><strong>{bitCount}</strong></label>
               <label>Pattern value <input type="range" min="0" max={2 ** bitCount - 1} value={pattern} onChange={(e) => setPattern(Number(e.target.value))} /><strong>{pattern}</strong></label>
               <p><strong>{binary}</strong> is one of <strong>{2 ** bitCount}</strong> possible patterns.</p>
-              <div className="prediction-box"><b>Predict</b><span>How many patterns can 8 bits represent?</span>{prediction === null ? <div><button onClick={() => setPrediction("128")}>128</button><button onClick={() => setPrediction("256")}>256</button><button onClick={() => setPrediction("512")}>512</button></div> : <p className={prediction === "256" ? "correct" : "incorrect"}>{prediction === "256" ? "Exactly: 2⁸ = 256." : "Test the rule: 2⁸ = 256."} <button onClick={() => setPrediction(null)}>Try again</button></p>}</div>
+              <div className="prediction-box"><b>Predict</b><span>How many patterns can 8 bits represent?</span>{prediction === null ? <div><button onClick={() => setPrediction("128")}>128</button><button onClick={() => setPrediction("256")}>256</button><button onClick={() => setPrediction("512")}>512</button></div> : <p className={prediction === "256" ? "correct" : "incorrect"}>{prediction === "256" ? "Exactly: 2⁸ = 256." : "Test the rule: 2⁸ = 256."} <button onClick={() => setPrediction(null)}>Try Again</button></p>}</div>
             </div>
           </article>
         )}
@@ -1027,14 +1246,14 @@ export default function Home() {
             <div className="final-reflection-heading"><p className="overline">Return to your starting model</p><h1>What became <em>more precise?</em></h1><p className="lede">These are the answers you recorded at the start. Read them without editing, then explain what you would add, remove, or say differently now.</p></div>
             <div className="answer-review-grid">{questions.map((question, index) => <article key={question}><span>0{index + 1}</span><div><b>{question}</b><p>{answers[index].trim() || "No starting answer was recorded."}</p></div></article>)}</div>
             <label className="final-reflection"><span>Your revised model</span><b>How do physical signals, bits, patterns, logic, hardware, software layers, and interpretation work together?</b><textarea value={notes} onChange={(event) => setNotes(event.target.value)} placeholder="Explain what you understand now and how your thinking changed…" /></label>
-            <div className="finish-card"><span>Lesson 01</span><div><h3>Your starting answers remain saved for comparison.</h3><p>When you are satisfied with your revised model, use “Mark lesson complete” below.</p></div><strong>Ready to finish</strong></div>
+            <div className="finish-card"><span>Lesson 01</span><div><h3>Your starting answers remain saved for comparison.</h3><p>When you are satisfied with your revised model, use “Mark Lesson Complete” below.</p></div><strong>Ready to finish</strong></div>
           </article>
         )}
 
         <footer className="lesson-nav">
           <button onClick={() => setCurrent((value) => Math.max(0, value - 1))} disabled={current === 0}>← Previous</button>
           <span>{steps.map((_, index) => <i key={index} className={`${index === current ? "active" : ""} ${completed.includes(index) ? "done" : ""}`} />)}</span>
-          <button className="next" onClick={goNext}>{current === steps.length - 1 ? "Mark lesson complete" : "Complete & continue"} →</button>
+          <button className="next" onClick={goNext}>{current === steps.length - 1 ? "Mark Lesson Complete" : "Next"} →</button>
         </footer>
       </section>
     </main>
